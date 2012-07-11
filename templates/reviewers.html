@@ -1,0 +1,5 @@
+h3. Cross-reviews map for {{ updated }} &mdash; Week {{ week }}
+
+|| Code reviwer || &raquo; || Code owner ||
+{% for r in reviewers %}| [~{{ r.reviewer }}] | reviews | [~{{ r.reviewee }}] |
+{% endfor %}
