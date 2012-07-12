@@ -26,3 +26,9 @@ if __name__ == "__main__":
     requirements = [match.group(1) for match in re.finditer("\{tr[^}]*\}\{td[^}]*\}([^}]*)\{td", page["content"])]
     LOGGER.info("%s requirement(s) found" % len(requirements))
 
+    title = "Weekly status report (week %s)" % wn
+    content =template.render(requirements=requirements)
+    LOGGER.info("Saving new blog post: \"%s\"" % title)
+    wiki_api.store_blogpost("CH", title, content)
+
+    LOGGER.info("Done")
