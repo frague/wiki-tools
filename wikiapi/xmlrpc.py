@@ -33,3 +33,9 @@ class api:
         if self.is_connected:
             return self.server.confluence1.updatePage(self.token, page, {"versionComment": "", "minorEdit": str(minor_change)})
         raise Exception("Not connected to wiki server")
+
+    def store_blogpost(self, space, title, content):
+        LOGGER.debug("Saving blogpost \"%s\"" % title)
+        if self.is_connected:
+            return self.server.confluence1.storeBlogEntry(self.token,
+                {"space": space, "title": title, "content": content})
