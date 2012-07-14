@@ -1,10 +1,18 @@
 #!/usr/bin/python
 
 import xmlrpclib
+from errors import *
 from logger import get_logger
+from decorator import decorator
 
 LOGGER = get_logger(__name__)
 
+@decorator
+def connect_first(f, *args, **kws):
+    if not args[0].is_connected():
+        raise NotConnectedError()
+    return f(*args, **kws)
+        
 class api:
     def __init__(self, server_url):
         self.server_url = server_url
@@ -13,29 +21,31 @@ class api:
 
     def connect(self, user, password):
         LOGGER.debug("Connecting to xmlrpc api")
-        self.server = xmlrpclib.ServerProxy(self.server_url)
-        self.token = self.server.confluence1.login(user, password)
-        if not self.is_connected:
-            raise Exception("Connection to wiki failed")
+        try:
+            self.server = xmlrpclib.ServerProxy(self.server_url)
+            self.token = self.server.confluence1.login(user, password)
+        except Exception, e:
+            raise ConnectionFailedError(e)
 
-    @property
+        if not self.is_connected:
+            raise ConnectionFailedError()
+
     def is_connected(self):
         return self.token is not None
 
+    @connect_first
     def get_page(self, space, page_name):
         LOGGER.debug("Retrieving page %s: \"%s\"" % (space, page_name))
-        if self.is_connected:
-            return self.server.confluence1.getPage(self.token, space, page_name)
-        raise Exception("Not connected to wiki server")
+        return self.server.confluence1.getPage(self.token, space, page_name)
 
+    @connect_first
     def update_page(self, page, minor_change=False):
         LOGGER.debug("Page update")
-        if self.is_connected:
-            return self.server.confluence1.updatePage(self.token, page, {"versionComment": "", "minorEdit": str(minor_change)})
-        raise Exception("Not connected to wiki server")
+        return self.server.confluence1.updatePage(self.token, page, 
+                {"versionComment": "", "minorEdit": str(minor_change)})
 
+    @connect_first
     def store_blogpost(self, space, title, content):
         LOGGER.debug("Saving blogpost \"%s\"" % title)
-        if self.is_connected:
-            return self.server.confluence1.storeBlogEntry(self.token,
+        return self.server.confluence1.storeBlogEntry(self.token,
                 {"space": space, "title": title, "content": content})
