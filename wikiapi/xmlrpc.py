@@ -49,3 +49,6 @@ class api:
         LOGGER.debug("Saving blogpost \"%s\"" % title)
         return self.server.confluence1.storeBlogEntry(self.token,
                 {"space": space, "title": title, "content": content})
+    @connect_first
+    def upload_attachment(self, page, file):
+        pass
