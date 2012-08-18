@@ -3,11 +3,11 @@
 import yaml
 from wikiapi import xmlrpc
 from utils import *
-from logger import get_logger
+from logger import make_custom_logger
 from jinja2 import Environment, PackageLoader
 
 if __name__ == "__main__":
-    LOGGER = get_logger(__name__)
+    LOGGER = make_custom_logger()
     config = get_config()
 
     env = Environment(loader=PackageLoader("cross_review", "templates"))

@@ -2,10 +2,10 @@
 
 import xmlrpclib
 from errors import *
-from logger import get_logger
+from logging import getLogger
 from decorator import decorator
 
-LOGGER = get_logger(__name__)
+LOGGER = getLogger()
 
 @decorator
 def connect_first(f, *args, **kws):

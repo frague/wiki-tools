@@ -4,11 +4,11 @@ import re
 import yaml
 from wikiapi import xmlrpc
 from utils import *
-from logger import get_logger
+from logging import getLogger
 from jinja2 import Environment, PackageLoader
 
 if __name__ == "__main__":
-    LOGGER = get_logger(__name__)
+    LOGGER = getLogger()
     config = get_config()
 
     env = Environment(loader=PackageLoader("weekly_report", "templates"))

@@ -1,6 +1,10 @@
 #!/usr/bin/python
 
 import SOAPpy
+from logging import getLogger
+from errors import *
+
+LOGGER = getLogger()
 
 class WikiPage:
     def __init__(self):
@@ -20,16 +24,19 @@ class WikiPage:
     def parse(page):
         wp = WikiPage()
         wp.id, wp.space, wp.title, wp.version, wp.content = page.id, page.space, page.title, page.version, page.content
+        LOGGER.debug("Parsing page \"%s\"" % wp)
         return wp
         
 
 class api:
     def __init__(self, server_url):
+        LOGGER.debug("SOAP api initialization for %s" % server_url)
         self.server_url = server_url
         self.soap = None
         self.token = None
 
     def connect(self, user, password):
+        LOGGER.debug("Logging in through SOAP api")
         self.soap = SOAPpy.WSDL.Proxy(self.server_url)
         self.token = self.soap.login(user, password)
 
@@ -40,10 +47,11 @@ class api:
     def get_page(self, space, page_name):
         if self.is_connected:
             return WikiPage.parse(self.soap.getPage(self.token, space, page_name))
-        raise Exception("Not connected to wiki server")
+        raise NotConnectedError
 
     def update_page(self, page, minor_change=False):
+        LOGGER.debug("Updating the page \"%s\"" % page)
         if self.is_connected:
             self.soap.updatePage(self.token, page, {"versionComment": "", "minorEdit": minor_change})
-        raise Exception("Not connected to wiki server")
+        raise NotConnectedError
 
