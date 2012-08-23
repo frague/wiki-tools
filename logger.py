@@ -2,7 +2,7 @@ import sys
 import logging
 import logging.handlers
 
-__author__ = 'Nick Bogdanov <nbogdanov@griddynamics.com>'
+__author__ = 'Nick Bogdanov <frague@mail.ru>'
 
 LOGGER_LEVEL = logging.DEBUG
 LOGGER_FORMAT = logging.Formatter("%(asctime)s %(module)s - %(levelname)s: %(message)s")
