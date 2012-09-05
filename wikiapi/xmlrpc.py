@@ -14,8 +14,9 @@ def connect_first(f, *args, **kws):
     return f(*args, **kws)
         
 class api:
-    def __init__(self, server_url):
+    def __init__(self, server_url, version=2):
         self.server_url = server_url
+        self.version = version
         self.server = None
         self.token = None
 
@@ -25,7 +26,11 @@ class api:
         LOGGER.debug("Connecting to xmlrpc api")
         try:
             self.server = xmlrpclib.ServerProxy(self.server_url)
-            self.token = self.server.confluence1.login(user, password)
+            if self.version == 2:
+            	self.api = self.server.confluence2
+            else:
+            	self.api = self.server.confluence1
+            self.token = self.api.login(user, password)
         except Exception, e:
             raise ConnectionFailedError(e)
 
@@ -51,30 +56,25 @@ class api:
     @connect_first
     def get_page(self, space, page_name):
         LOGGER.debug("Retrieving page %s: \"%s\"" % (space, page_name))
-        page = self.server.confluence1.getPage(self.token, space, page_name)
+        page = self.api.getPage(self.token, space, page_name)
         self._cache_page(page)
         return page
 
     @connect_first
     def update_page(self, page, minor_change=False):
         LOGGER.debug("Page update")
-        return self.server.confluence1.updatePage(self.token, page, 
+        return self.api.updatePage(self.token, page, 
                 {"versionComment": "", "minorEdit": str(minor_change)})
 
     @connect_first
     def store_blogpost(self, space, title, content):
         LOGGER.debug("Saving blogpost \"%s\"" % title)
-        return self.server.confluence1.storeBlogEntry(self.token,
+        return self.api.storeBlogEntry(self.token,
                 {"space": space, "title": title, "content": content})
 
     @connect_first
     def upload_attachment(self, page_id, file_name, content_type, contents):
         LOGGER.debug("Uploading attachment (%s): %s to page %s - %s bytes of data" % (content_type, file_name, page_id, len(contents)))
         attachment = {"fileName": file_name, "contentType": content_type}
-        self.server.confluence1.addAttachment(self.token, page_id, attachment, xmlrpclib.Binary(contents))
+        self.api.addAttachment(self.token, page_id, attachment, xmlrpclib.Binary(contents))
 
-    """@connect_first
-    def upload_attachment(self, page_title, file_name, content_type, contents):
-        LOGGER.debug("Uploading attachment (%s): %s to page %s" % (content_type, file_name, page_title))
-        attachment = {"name": file_name, "mimeType": content_type, "file": xmlrpclib.Binary(contents)}
-        self.server.confluence1.putAttachment(self.token, page_title, attachment)"""

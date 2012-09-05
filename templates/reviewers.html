@@ -1,5 +1,15 @@
-h3. Cross-reviews map for {{ updated }} &mdash; Week {{ week }}
+<h3>Cross-reviews map for {{ updated }} &mdash; Week {{ week }}</h3>
 
-|| Code reviwer || &raquo; || Code owner ||
-{% for r in reviewers %}| [~{{ r.reviewer }}] | reviews | [~{{ r.reviewee }}] |
+<table><tbody>
+<tr>
+<th><p> Code reviwer </p></th>
+<th><p style="text-align:center"> &raquo; </p></th>
+<th><p> Code owner </p></th>
+</tr>
+{% for r in reviewers %}<tr>
+<td><p> <ac:link><ri:user ri:username="{{ r.reviewer }}" /></ac:link> </p></td>
+<td><p> reviews </p></td>
+<td><p> <ac:link><ri:user ri:username="{{ r.reviewee }}" /></ac:link> </p></td>
+</tr>
 {% endfor %}
+</tbody></table>
