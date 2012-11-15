@@ -67,6 +67,12 @@ class api:
                 {"versionComment": "", "minorEdit": str(minor_change)})
 
     @connect_first
+    def render_content(self, page):
+        LOGGER.debug("Rendering page contents")
+        return self.api.renderContent(self.token, page["space"],
+                page["id"], page["content"]) 
+
+    @connect_first
     def store_blogpost(self, space, title, content):
         LOGGER.debug("Saving blogpost \"%s\"" % title)
         return self.api.storeBlogEntry(self.token,
