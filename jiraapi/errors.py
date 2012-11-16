@@ -1,0 +1,10 @@
+#!/usr/bin/python
+
+class JiraError(Exception):
+    """ Base """
+
+class NotConnectedError(JiraError):
+    """ Trying to perform the operation not being connected """
+
+class ConnectionFailedError(JiraError):
+    """ When connection to jira server failed """
