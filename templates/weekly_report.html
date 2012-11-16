@@ -1,9 +1,11 @@
-h4. Overall project status
-Project status is (*g)*Green*/(*)*Yellow*/(*r)*Red*.
+<h4>Overall Status</h4>
+<p>Project's status is <ac:emoticon ac:name="green-star" /> <strong>Green<strong>/<ac:emoticon ac:name="yellow-star" /> <strong>Yellow</strong>/<ac:emoticon ac:name="red-star" /> <strong>Red</strong>.</p>
 
-h4. Current iteration status
-{% for r in requirements %}| {{ r }} | (*r)(*)(*g) _Status_ |
-{% endfor %}
+<h4>Current iteration status</h4>
+<table><tbody>
+<tr><th>Requirement</th><th>Tasks</th><th>Status/Comments</th></tr>
+{% for r in requirements %}<tr><td>{{ r }}</td><td style="width:30%"><ac:emoticon ac:name="green-star" /><ac:emoticon ac:name="yellow-star" /><ac:emoticon ac:name="red-star" /> <span>Status</span></td></tr>
+{% endfor %}</tbody></table>
 
-h5. Risks
-All current risks are listed on the [Risks] page.
+<h5>Risks</h5>
+All current risks are listed on the <a href="/wiki/display/DEC/Risks">Risks</a> page.
