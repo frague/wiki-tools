@@ -11,6 +11,6 @@ if __name__ == "__main__":
 
     jira_api = rest.api(config["jira_rest"], config["wiki_login"], config["wiki_password"])
 
-    issue = jira_api.get_issue("DEC-111")
+    issues = jira_api.search_issues("", results=2)
 
-    #print issue
+    print issues
