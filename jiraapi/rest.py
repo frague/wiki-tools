@@ -14,12 +14,13 @@ class issue:
         self.summary = None
         self.project = None
         self.description = None
+        self.status = None
 
     def __init__(self):
         self.clear()
 
     def __repr__(self):
-        return "(%s) %s" % (self.key, self.summary)
+        return "(%s) %s [%s]" % (self.key, self.summary, self.status)
 
     def parse(self, source):
         try:
@@ -27,6 +28,7 @@ class issue:
             self.summary = source["fields"]["summary"]
             self.description = source["fields"]["description"]
             self.project = source["fields"]["project"]["key"]
+            self.status = source["fields"]["status"]["name"]
         except Exception, e:
             LOGGER.exception(e)
             self.clear()
