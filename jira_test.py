@@ -11,6 +11,5 @@ if __name__ == "__main__":
 
     jira_api = rest.api(config["jira_rest"], config["wiki_login"], config["wiki_password"])
 
-    issues = jira_api.search_issues("", results=2)
-
-    print issues
+    #issues = jira_api.filter_search(14170)
+    print jira_api.get_worklogs("TORS-363") 

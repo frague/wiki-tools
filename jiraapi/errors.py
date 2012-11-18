@@ -8,3 +8,6 @@ class NotConnectedError(JiraError):
 
 class ConnectionFailedError(JiraError):
     """ When connection to jira server failed """
+
+class NotFoundError(JiraError):
+    """ When something cannot be found in place where supposed to be """
